@@ -112,10 +112,10 @@ class SNPP:
         """
 
         self.sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        if self.debuglevel > 0: print 'connect:', (host, port)
+        if self.debuglevel > 0: print('connect:' % (host, port))
         self.sock.connect((host,port))
         (code,msg)=self._getreply()
-        if self.debuglevel > 0: print "connect:", msg
+        if self.debuglevel > 0: print("connect:" % msg)
         if code != 220:
             raise SNPPConnectError(code, msg)
 
@@ -140,7 +140,7 @@ class SNPP:
             if line == '':
                 self.close()
                 raise SNPPServerDisconnected("Connection unexpectedly closed")
-            if self.debuglevel > 0: print 'reply:', `line`
+            if self.debuglevel > 0: print('reply: %s', line)
             resp.append(string.strip(line[4:]))
             code=line[:3]
             # Check that the error code is syntactically correct.
@@ -156,14 +156,14 @@ class SNPP:
 
         errmsg = string.join(resp,"\n")
         if self.debuglevel > 0: 
-            print 'reply: retcode (%s); Msg: %s' % (errcode,errmsg)
+            print('reply: retcode (%s); Msg: %s' % (errcode,errmsg))
         return errcode, errmsg
 
     def docmd(self, cmd, args=""):
         """Send a command, and return its response code."""
         self._putcmd(cmd,args)
         (code, msg) = self._getreply()
-        if self.debuglevel > 0: print "%s resp: %d, %s" % (cmd, code, msg)
+        if self.debuglevel > 0: print("%s resp: %d, %s" % (cmd, code, msg))
         if code == 421: raise SNPPConnectError(code, msg)
         if code >= 500 and code < 800: raise SNPPResponseError(code, msg)
         return (code, msg)
@@ -179,7 +179,7 @@ class SNPP:
         !!!! REVISIT ME -- I could be better !!!!!1
 
         """
-        if self.debuglevel > 0: print 'send: %s' % (str)
+        if self.debuglevel > 0: print('send: %s' % (str))
         if self.sock != None:
             try:
                 self.sock.send(str)
@@ -238,7 +238,7 @@ class SNPP:
             self._send(str=self.quotedata(lines))
             self._send("%s.%s" % (CRLF,CRLF))
             (code, msg) = self._getreply()
-            if self.debuglevel > 0: print "DATA resp: %d, %s" % (code, msg)
+            if self.debuglevel > 0: print("DATA resp: %d, %s" % (code, msg))
         return ( code, msg )
     
 
@@ -326,26 +326,26 @@ if __name__=='__main__':
 I want to see about multiple lines
 I don't see any reason why this shouldn't work
     """
-    print  s.pager(id='5551212',pin='1111')
-    print s.level('0')
-    #print s.coverage('0')
-    print s.holduntil('001231120000 +0100')
-    print s.callerid('Monty')
-    print s.login(login="mtaylor",password="password")
-    print s.data(lines=lines)
+    print(s.pager(id='5551212',pin='1111'))
+    print(s.level('0'))
+    #print(s.coverage('0'))
+    print(s.holduntil('001231120000 +0100'))
+    print(s.callerid('Monty'))
+    print(s.login(login="mtaylor",password="password"))
+    print(s.data(lines=lines))
     try:
-      print s.message(msg='This is a test page from Python')
-    except SNPPResponseException, args:
-      print args.snpp_code, args.snpp_error;
-    print s.send()
-    print s.reset()
+      print (s.message(msg='This is a test page from Python'))
+    except SNPPResponseException as args:
+      print (args.snpp_code, args.snpp_error);
+    print (s.send())
+    print (s.reset())
     try:
-      print  s.pager(id='5551212')
-      print s.message(msg='This is a test page from Python')
-    except SNPPResponseException, args:
-      print args.snpp_code, args.snpp_error;
-    (code, msg) =  s.help()
-    print msg
-    print s.send()
-    print s.quit()
+      print(s.pager(id='5551212'))
+      print(s.message(msg='This is a test page from Python'))
+    except SNPPResponseException as args:
+      print(args.snpp_code, args.snpp_error);
+    (code, msg) = s.help()
+    print(msg)
+    print(s.send())
+    print(s.quit())
     s.close()

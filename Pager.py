@@ -347,7 +347,7 @@ if __name__=='__main__':
     page.add_recipient(bob)
    
     page1=page.send()
-    print type(page1)
+    print(type(page1))
 
     mess.set_message(message="Wow! It's really down this time")
 
@@ -357,6 +357,6 @@ if __name__=='__main__':
     page.add_recipient([spam, eggs])
     page.del_recipient(bob)
     page2=page.send()
-    print type(page2)
+    print(type(page2))
     page.quit()
 

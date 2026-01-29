@@ -15,10 +15,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# bootstrap setuptools if necessary
-from ez_setup import use_setuptools
-use_setuptools()
-
 from setuptools import setup
 
 classifiers="""\
@@ -36,7 +32,6 @@ setup (name = "python-snpp",
        author_email = "mordred@inaugust.com",
        url = "http://launchpad.net/python-snpp",
        license="GPL",
-       classifiers=filter(None, classifiers.splitlines()),
+       classifiers=classifiers.splitlines(),
        py_modules = ['snpplib','Pager'],
-
       )
