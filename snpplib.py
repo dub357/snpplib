@@ -112,10 +112,10 @@ class SNPP:
         """
 
         self.sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        if self.debuglevel > 0: print('connect:' % (host, port))
+        if self.debuglevel > 0: print('connect:', (host, port))
         self.sock.connect((host,port))
         (code,msg)=self._getreply()
-        if self.debuglevel > 0: print("connect:" % msg)
+        if self.debuglevel > 0: print("connect:", msg)
         if code != 220:
             raise SNPPConnectError(code, msg)
 
@@ -140,7 +140,7 @@ class SNPP:
             if line == '':
                 self.close()
                 raise SNPPServerDisconnected("Connection unexpectedly closed")
-            if self.debuglevel > 0: print('reply: %s', line)
+            if self.debuglevel > 0: print('reply:', line)
             resp.append(string.strip(line[4:]))
             code=line[:3]
             # Check that the error code is syntactically correct.
@@ -334,16 +334,16 @@ I don't see any reason why this shouldn't work
     print(s.login(login="mtaylor",password="password"))
     print(s.data(lines=lines))
     try:
-      print (s.message(msg='This is a test page from Python'))
+      print(s.message(msg='This is a test page from Python'))
     except SNPPResponseException as args:
-      print (args.snpp_code, args.snpp_error);
-    print (s.send())
-    print (s.reset())
+      print(args.snpp_code, args.snpp_error)
+    print(s.send())
+    print(s.reset())
     try:
       print(s.pager(id='5551212'))
       print(s.message(msg='This is a test page from Python'))
     except SNPPResponseException as args:
-      print(args.snpp_code, args.snpp_error);
+      print(args.snpp_code, args.snpp_error)
     (code, msg) = s.help()
     print(msg)
     print(s.send())
