@@ -112,6 +112,7 @@ class SNPP:
         """
 
         self.sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.settimeout(10)
         if self.debuglevel > 0: print('connect:', (host, port))
         self.sock.connect((host,port))
         (code,msg)=self._getreply()
@@ -173,16 +174,16 @@ class SNPP:
         str = '%s %s%s' % (cmd, args, CRLF)
         self._send(str)
     
-    def _send(self, str):
-        """Send `str' to the server.
+    def _send(self, msg):
+        """Send `msg' to the server.
 
         !!!! REVISIT ME -- I could be better !!!!!1
 
         """
-        if self.debuglevel > 0: print('send: %s' % (str))
+        if self.debuglevel > 0: print('send: %s' % (msg))
         if self.sock != None:
             try:
-                self.sock.send(str)
+                self.sock.send(msg.encode())
             except socket.error:
                 raise SNPPServerDisconnected('Server not connected')
         else:
