@@ -137,17 +137,17 @@ class SNPP:
         if self.file is None:
             self.file = self.sock.makefile('rb')
         while 1:
-            line = self.file.readline()
+            line = self.file.readline().decode()
             if line == '':
                 self.close()
                 raise SNPPServerDisconnected("Connection unexpectedly closed")
             if self.debuglevel > 0: print('reply:', line)
-            resp.append(string.strip(line[4:]))
+            resp.append(line[4:].strip())
             code=line[:3]
             # Check that the error code is syntactically correct.
             # Don't attempt to read a continuation line if it is broken.
             try:
-                errcode = string.atoi(code)
+                errcode = int(code)
             except ValueError:
                 errcode = -1
                 break
@@ -155,7 +155,7 @@ class SNPP:
             if line[3:4]!="-":
                 break
 
-        errmsg = string.join(resp,"\n")
+        errmsg = "\n".join(resp)
         if self.debuglevel > 0: 
             print('reply: retcode (%s); Msg: %s' % (errcode,errmsg))
         return errcode, errmsg
@@ -189,7 +189,7 @@ class SNPP:
         else:
             try:
                 self.connect(self.host,self.port)
-                self.sock.send(str)
+                self.sock.send(msg.encode())
             except socket.error:
                 raise SNPPServerDisconnected('Problems with socket')
     
@@ -228,7 +228,7 @@ class SNPP:
         if ( code == 214 ):
             helpmsg = ""
         while ( code == 214 ):
-            helpmsg = string.join([helpmsg,msg],"\n")
+            helpmsg = "\n".join([helpmsg,msg])
             ( code, msg ) = self._getreply()
         return ( code, helpmsg )
 
